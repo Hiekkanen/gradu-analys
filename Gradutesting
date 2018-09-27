@@ -1,0 +1,55 @@
+#Docs: https://docs.coinapi.io/?python#historical-data
+import requests
+import pandas as pd
+
+
+
+#Exchanges
+url = 'https://rest.coinapi.io/v1/exchanges'
+headers = {'X-CoinAPI-Key' : '05C11D5B-1EC3-4E74-9F70-E95F7A1DB9A4', 'Accept' : 'application/json'}
+response = requests.get(url, headers=headers)
+
+#Assets
+df = pd.DataFrame(response.json())
+df.head()
+assets = pd.DataFrame(response.json())
+
+#Symbols
+url = 'https://rest.coinapi.io/v1/symbols'
+headers = {'X-CoinAPI-Key' : '05C11D5B-1EC3-4E74-9F70-E95F7A1DB9A4', 'Accept' : 'application/json'}
+response = requests.get(url, headers=headers)
+
+symbols = pd.DataFrame(response.json())
+
+
+# ETH BTC
+
+eth = symbols.loc[symbols['asset_id_base'] == 'ETH']
+
+
+ethbtc = symbols.loc[(symbols['asset_id_base'] == 'ETH') & (symbols['asset_id_quote'] == 'BTC')]
+
+
+#Request trade data
+
+
+symbolid = 'BINANCE_SPOT_ETH_BTC'
+url = 'https://rest.coinapi.io/v1/trades/' + symbolid + '/latest?limit=100'
+response = requests.get(url, headers=headers)
+
+trades  = pd.DataFrame(response.json())
+
+
+#quotes
+
+url = 'https://rest.coinapi.io/v1/quotes/' + symbolid + '/current'
+response = requests.get(url, headers=headers)
+
+quotes = pd.DataFrame(response.json())
+
+
+
+
+
+
+
